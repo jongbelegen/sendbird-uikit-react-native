@@ -1,6 +1,5 @@
 import React, { Ref } from 'react';
 import { FlatList, FlatListProps, ListRenderItem, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import {
   BottomSheetItem,
@@ -27,6 +26,7 @@ import {
   shouldRenderReaction,
   toMegabyte,
   useFreshCallback,
+  useSafeAreaPadding,
 } from '@sendbird/uikit-utils';
 
 import type { UserProfileContextType } from '../../contexts/UserProfileCtx';
@@ -126,7 +126,7 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
   const { STRINGS } = useLocalization();
   const { colors } = useUIKitTheme();
   const { show } = useUserProfile();
-  const { left, right } = useSafeAreaInsets();
+  const safeAreaLayout = useSafeAreaPadding(['left', 'right']);
   const createMessagePressActions = useCreateMessagePressActions({
     channel,
     currentUserId,
@@ -137,8 +137,6 @@ const ChannelMessageList = <T extends SendbirdGroupChannel | SendbirdOpenChannel
     onResendFailedMessage,
     onPressMediaMessage,
   });
-
-  const safeAreaLayout = { paddingLeft: left, paddingRight: right };
 
   const renderItem: ListRenderItem<SendbirdMessage> = useFreshCallback(({ item, index }) => {
     const { onPress, onLongPress, bottomSheetItem } = createMessagePressActions({ message: item });
@@ -435,8 +433,8 @@ const styles = createStyleSheet({
     position: 'absolute',
     zIndex: 999,
     top: 8,
-    left: 8,
-    right: 8,
+    start: 8,
+    end: 8,
   },
   frozenListPadding: {
     paddingBottom: 32,
@@ -451,7 +449,7 @@ const styles = createStyleSheet({
     position: 'absolute',
     zIndex: 998,
     bottom: 10,
-    right: 16,
+    end: 16,
   },
 });
 
